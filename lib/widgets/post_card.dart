@@ -482,6 +482,7 @@ class _PostCardState extends State<PostCard>
                   _Badge(
                     label: item.topic.first,
                     color: const Color(0x99000000),
+                    foreground: const Color(AppColors.textPrimary),
                   ),
               ],
             ),
@@ -784,10 +785,18 @@ class _InlineAction extends StatelessWidget {
 }
 
 class _Badge extends StatelessWidget {
-  const _Badge({required this.label, required this.color});
+  const _Badge({
+    required this.label,
+    required this.color,
+    this.foreground = const Color(AppColors.onAccent),
+  });
 
   final String label;
   final Color color;
+
+  /// 文字颜色。默认 [AppColors.onAccent]（近黑），用于薄荷绿/橙黄等亮底；
+  /// 半透明黑底（话题标签）应传白色，否则近黑字会糊在深色背景里看不清。
+  final Color foreground;
 
   @override
   Widget build(BuildContext context) {
@@ -796,11 +805,11 @@ class _Badge extends StatelessWidget {
       decoration: BoxDecoration(color: color, borderRadius: AppRadius.rXs),
       child: Text(
         label,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 10,
           height: 1.1,
           fontWeight: FontWeight.w800,
-          color: Color(AppColors.onAccent),
+          color: foreground,
         ),
       ),
     );
@@ -1108,9 +1117,9 @@ class _PostFollowChip extends StatelessWidget {
       builder: (context, relations, _) {
         final followed = relations[uid] ?? (known ? following : false);
         if (followed) return const SizedBox.shrink();
-        return GestureDetector(
-          behavior: HitTestBehavior.opaque,
+        return PressableScale(
           onTap: () => _follow(context),
+          scale: 0.88,
           child: Container(
             margin: const EdgeInsets.only(left: 4),
             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),

@@ -525,7 +525,6 @@ class _VideoCardState extends State<VideoCard>
       // 上报失败不影响系统分享
     }
     if (!mounted) return;
-    if (!mounted) return;
     final f = widget.item;
     final cover = f.cover.isNotEmpty
         ? f.cover
