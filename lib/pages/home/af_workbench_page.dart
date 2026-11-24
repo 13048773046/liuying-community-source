@@ -4564,43 +4564,49 @@ class _AfWorkbenchPageState extends State<AfWorkbenchPage>
                 ),
                 const SizedBox(width: 9),
                 Expanded(
-                  child: TextField(
-                    focusNode: _inputFocus,
-                    controller: _input,
-                    minLines: 1,
-                    maxLines: 4,
-                    cursorColor: const Color(AfPalette.accent),
-                    textInputAction: TextInputAction.send,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      height: 1.5,
-                      color: Color(AfPalette.text),
-                    ),
-                    onTap: _closeAttachForTyping,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: const Color(AfPalette.card2),
-                      border: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      isDense: true,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 6),
-                      hintText: _micOn
-                          ? '正在听…松手结束'
-                          : (_token == null
-                                ? '登录后可用…'
-                                : (_left <= 0
-                                      ? '额度已用完'
-                                      : (_mode == 'work'
-                                            ? '给我一个目标，我来拆步骤…'
-                                            : '问点什么…'))),
-                      hintStyle: const TextStyle(
+                  child: AnimatedSize(
+                    alignment: Alignment.center,
+                    duration: const Duration(milliseconds: 140),
+                    curve: Curves.easeOutCubic,
+                    child: TextField(
+                      focusNode: _inputFocus,
+                      controller: _input,
+                      minLines: 1,
+                      maxLines: 4,
+                      cursorColor: const Color(AfPalette.accent),
+                      textInputAction: TextInputAction.send,
+                      style: const TextStyle(
                         fontSize: 13,
-                        color: Color(AfPalette.text3),
+                        height: 1.5,
+                        color: Color(AfPalette.text),
                       ),
+                      onTap: _closeAttachForTyping,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: const Color(AfPalette.card2),
+                        border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        isDense: true,
+                        contentPadding:
+                            const EdgeInsets.symmetric(vertical: 6),
+                        hintText: _micOn
+                            ? '正在听…松手结束'
+                            : (_token == null
+                                  ? '登录后可用…'
+                                  : (_left <= 0
+                                        ? '额度已用完'
+                                        : (_mode == 'work'
+                                              ? '给我一个目标，我来拆步骤…'
+                                              : '问点什么…'))),
+                        hintStyle: const TextStyle(
+                          fontSize: 13,
+                          color: Color(AfPalette.text3),
+                        ),
+                      ),
+                      onSubmitted: (_) => _send(),
                     ),
-                    onSubmitted: (_) => _send(),
                   ),
                 ),
                 GestureDetector(

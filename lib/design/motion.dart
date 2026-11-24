@@ -584,8 +584,9 @@ List<String> phraseChunks(String text) {
   return chunks;
 }
 
-/// 流式正文：每段从透明 + 4px 高斯模糊 + 下移 4px 进入，末尾跟一个闪烁光标。
-/// 气泡高度用 [AnimatedSize] 平滑增长，文字块不会闪白。
+/// 流式正文：每段从透明 + 高斯模糊 + 下移进入，末尾跟一个闪烁光标。
+/// 高度随内容即时增长（不做高度补间），避免 160ms 补间与 38ms 逐段揭示节奏
+/// 互相打架，消除气泡边缘持续抽动。
 class PhraseRevealText extends StatefulWidget {
   const PhraseRevealText({
     super.key,
@@ -703,14 +704,9 @@ class _PhraseRevealTextState extends State<PhraseRevealText> {
         ),
       );
     }
-    return AnimatedSize(
-      alignment: Alignment.topLeft,
-      duration: const Duration(milliseconds: 160),
-      curve: Curves.easeOutCubic,
-      child: Text.rich(
-        TextSpan(style: widget.style, children: spans),
-        textAlign: TextAlign.start,
-      ),
+    return Text.rich(
+      TextSpan(style: widget.style, children: spans),
+      textAlign: TextAlign.start,
     );
   }
 }
@@ -729,8 +725,10 @@ class _RevealChunk extends StatelessWidget {
       curve: Curves.easeOutCubic,
       child: Text(text, style: style),
       builder: (_, v, child) {
-        final blur = 4.0 * (1 - v);
-        final content = blur <= 0.2
+        // 只在前半段做高斯模糊（峰值降到 2.5），后半段直接淡入。
+        // 流式时同时有多个 chunk 入场，降低 blur 强度可明显减轻 GPU 压力。
+        final blur = 2.5 * (1 - v).clamp(0.0, 1.0);
+        final content = v > 0.5 || blur <= 0.15
             ? child!
             : ImageFiltered(
                 imageFilter: ui.ImageFilter.blur(sigmaX: blur, sigmaY: blur),
