@@ -1,0 +1,27 @@
+name: apply-patch
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply optimization patch
+        run: |
+          set -o pipefail
+          curl -fsSL "https://aka.doubaocdn.com/s/jF5aUo5nWX" -o "$RUNNER_TEMP/liuying.patch"
+          git apply --check "$RUNNER_TEMP/liuying.patch"
+          git apply "$RUNNER_TEMP/liuying.patch"
+      - name: Commit and push
+        run: |
+          set -euo pipefail
+          git config user.name "liuying-bot"
+          git config user.email "liuying-bot@users.noreply.github.com"
+          git add README.md pubspec.yaml lib/config.dart lib/pages/home/af_workbench_page.dart lib/pages/message/dm_chat_page.dart test/dm_motion_test.dart
+          git commit -m "perf(chat): 0.9.65 流式重绘隔离与输入栏动画收口"
+          git push origin HEAD:main
