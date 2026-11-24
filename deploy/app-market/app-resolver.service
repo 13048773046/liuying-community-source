@@ -1,0 +1,18 @@
+[Unit]
+Description=Liuying App Market Resolver
+After=network.target
+Before=app-delivery.service
+
+[Service]
+Type=simple
+WorkingDirectory=/www/wwwroot/Yosar-community/services/app_resolver
+EnvironmentFile=/www/wwwroot/Yosar-community/services/app-market.env
+Environment=APP_RESOLVER_HOST=127.0.0.1
+Environment=APP_RESOLVER_PORT=8793
+ExecStart=/usr/bin/python3 /www/wwwroot/Yosar-community/services/app_resolver/app.py
+Restart=always
+RestartSec=3
+User=root
+
+[Install]
+WantedBy=multi-user.target

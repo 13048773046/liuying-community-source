@@ -1,0 +1,24 @@
+# 文本统一 LF，Windows 脚本除外
+* text=auto eol=lf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+# 二进制素材不做文本 diff
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.ico binary
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+*.wasm binary
+*.zip binary
+*.apk binary
+*.ipa binary
+
+# 生成物/第三方保持原样
+pubspec.lock linguist-generated=true
+community/templates/invite/cap/cap.min.js linguist-generated=true

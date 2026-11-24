@@ -1,0 +1,46 @@
+name: ios-unsigned
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_name:
+        description: '版本名，例如 0.9.64'
+        required: true
+        default: '0.9.64'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.7'
+          cache: true
+      - name: Build unsigned app
+        run: |
+          set -o pipefail
+          flutter pub get
+          flutter build ios --release --no-codesign
+      - name: Package unsigned IPA
+        run: |
+          set -euo pipefail
+          APP=$(find build/ios/iphoneos -maxdepth 1 -name '*.app' | head -1)
+          test -n "$APP"
+          mkdir -p build/ios/ipa/Payload
+          cp -R "$APP" build/ios/ipa/Payload/
+          cd build/ios/ipa
+          zip -qry "liuying-community-${{ inputs.build_name }}-unsigned.ipa" Payload
+          shasum -a 256 "liuying-community-${{ inputs.build_name }}-unsigned.ipa" | tee SHA256.txt
+          unzip -l "liuying-community-${{ inputs.build_name }}-unsigned.ipa" | grep 'Payload/.*\.app/Info.plist'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-unsigned-ipa
+          path: |
+            build/ios/ipa/liuying-community-${{ inputs.build_name }}-unsigned.ipa
+            build/ios/ipa/SHA256.txt
+          if-no-files-found: error
