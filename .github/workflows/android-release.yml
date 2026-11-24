@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       build_name:
-        description: '版本名，例如 0.9.64'
+        description: '版本名，例如 0.9.65'
         required: true
-        default: '0.9.64'
+        default: '0.9.65'
 
 permissions:
   contents: read
