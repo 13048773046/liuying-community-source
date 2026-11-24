@@ -323,7 +323,10 @@ String afFallbackSummary(String body) {
 }
 
 class _AfWorkbenchPageState extends State<AfWorkbenchPage>
-    with WidgetsBindingObserver, SingleTickerProviderStateMixin, SecureScreenMixin<AfWorkbenchPage> {
+    with
+        WidgetsBindingObserver,
+        SingleTickerProviderStateMixin,
+        SecureScreenMixin<AfWorkbenchPage> {
   final stt.SpeechToText _speech = stt.SpeechToText();
   bool _micReady = false;
   bool _micOn = false;
@@ -2475,8 +2478,8 @@ class _AfWorkbenchPageState extends State<AfWorkbenchPage>
                       const SizedBox(width: 8),
                     ],
                     Container(
-                      width: MediaQuery.sizeOf(context).width *
-                          (0.42 + 0.08 * i),
+                      width:
+                          MediaQuery.sizeOf(context).width * (0.42 + 0.08 * i),
                       height: 44,
                       decoration: BoxDecoration(
                         color: const Color(AfPalette.card),
@@ -3070,13 +3073,15 @@ class _AfWorkbenchPageState extends State<AfWorkbenchPage>
                   color: Color(0xFFE7EBF1),
                 ),
                 child: (m.streaming || identical(m, _activeAi))
-                    ? PhraseRevealText(
-                        text: parts.body,
-                        animate: true,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          height: 1.7,
-                          color: Color(0xFFE7EBF1),
+                    ? RepaintBoundary(
+                        child: PhraseRevealText(
+                          text: parts.body,
+                          animate: true,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            height: 1.7,
+                            color: Color(0xFFE7EBF1),
+                          ),
                         ),
                       )
                     : _richBody(parts.body),
@@ -4010,13 +4015,15 @@ class _AfWorkbenchPageState extends State<AfWorkbenchPage>
                           color: Color(AfPalette.text),
                         ),
                         child: (m.streaming || identical(m, _activeAi))
-                            ? PhraseRevealText(
-                                text: body,
-                                animate: true,
-                                style: const TextStyle(
-                                  fontSize: 13.5,
-                                  height: 1.75,
-                                  color: Color(AfPalette.text),
+                            ? RepaintBoundary(
+                                child: PhraseRevealText(
+                                  text: body,
+                                  animate: true,
+                                  style: const TextStyle(
+                                    fontSize: 13.5,
+                                    height: 1.75,
+                                    color: Color(AfPalette.text),
+                                  ),
                                 ),
                               )
                             : _richBody(body),
@@ -4565,9 +4572,10 @@ class _AfWorkbenchPageState extends State<AfWorkbenchPage>
                 const SizedBox(width: 9),
                 Expanded(
                   child: AnimatedSize(
-                    alignment: Alignment.center,
-                    duration: const Duration(milliseconds: 140),
+                    alignment: Alignment.bottomCenter,
+                    duration: const Duration(milliseconds: 120),
                     curve: Curves.easeOutCubic,
+                    clipBehavior: Clip.none,
                     child: TextField(
                       focusNode: _inputFocus,
                       controller: _input,
@@ -4589,8 +4597,7 @@ class _AfWorkbenchPageState extends State<AfWorkbenchPage>
                         focusedBorder: InputBorder.none,
                         disabledBorder: InputBorder.none,
                         isDense: true,
-                        contentPadding:
-                            const EdgeInsets.symmetric(vertical: 6),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 6),
                         hintText: _micOn
                             ? '正在听…松手结束'
                             : (_token == null

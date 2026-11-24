@@ -98,6 +98,25 @@ void main() {
     expect(area.bottom, lessThan(844 - 300 + 20));
   });
 
+  testWidgets('输入栏多行连续换行时向上生长且不裁切', (t) async {
+    _size(t);
+    await t.pumpWidget(_app());
+    await _settle(t);
+
+    final fieldFinder = find.byType(TextField);
+    final before = t.getRect(fieldFinder);
+    await t.enterText(fieldFinder, '第一行\n第二行\n第三行\n第四行');
+    await t.pump();
+    for (var i = 0; i < 6; i++) {
+      await t.pump(const Duration(milliseconds: 20));
+    }
+
+    expect(t.takeException(), isNull);
+    final after = t.getRect(fieldFinder);
+    expect(after.height, greaterThan(before.height));
+    expect(after.bottom, closeTo(before.bottom, 1));
+  });
+
   testWidgets('首次进入直接停在最新一条，不播放长距离滚动', (t) async {
     _size(t);
     final history = List.generate(30, (i) {

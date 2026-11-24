@@ -21,14 +21,14 @@ const String kApiBase = String.fromEnvironment(
 );
 
 /// 客户端展示版本号（与 pubspec version 的 name 对齐；改版本时同步这里）
-const String kAppVersion = '0.9.64';
+const String kAppVersion = '0.9.65';
 
 /// 客户端 build 号（与 pubspec version 的 +112 对齐；版本检查用）
-const int kAppBuild = 135;
+const int kAppBuild = 136;
 
 /// 代码热更标记：用于验证 Shorebird 补丁确实替换了 Dart 代码，
 /// 不参与版本比较，也不影响接口协议。
-const String kHotUpdateStamp = '补丁已生效 · 主页修正';
+const String kHotUpdateStamp = '体验优化 · 流式与输入栏';
 
 /// 音乐站基地址（账号登录互通：读音乐 users/tokens，登录仍走音乐登录接口）
 const String kMusicBase = '$kSiteBase/music';

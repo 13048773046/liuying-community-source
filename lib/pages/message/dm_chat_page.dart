@@ -2092,9 +2092,11 @@ class _DmChatPageState extends State<DmChatPage> with TickerProviderStateMixin {
             ),
           ),
           child: m?['_stream'] == true
-              ? KeyedSubtree(
-                  key: ValueKey('dm_stream_${m?['id'] ?? ''}'),
-                  child: _streamingText(content, intOf(m?['_shown']), fg),
+              ? RepaintBoundary(
+                  child: KeyedSubtree(
+                    key: ValueKey('dm_stream_${m?['id'] ?? ''}'),
+                    child: _streamingText(content, intOf(m?['_shown']), fg),
+                  ),
                 )
               : TextEmojiText(content, style: AppType.body.copyWith(color: fg)),
         );
@@ -2990,9 +2992,10 @@ class _DmChatPageState extends State<DmChatPage> with TickerProviderStateMixin {
                           child: Opacity(
                             opacity: _voiceMode ? 0 : 1,
                             child: AnimatedSize(
-                              alignment: Alignment.center,
-                              duration: const Duration(milliseconds: 140),
+                              alignment: Alignment.bottomCenter,
+                              duration: const Duration(milliseconds: 120),
                               curve: Curves.easeOutCubic,
+                              clipBehavior: Clip.none,
                               child: TextField(
                                 controller: _input,
                                 focusNode: _inputFocus,
